@@ -13,4 +13,10 @@ binds:
           - authorization
           exposeHeaders:
           - "Mcp-Session-Id"
+        jwtAuth:
+          mode: strict
+          issuer: "chains-pilot"
+          audiences: ["gateway.v244.net"]
+          jwks:
+            file: /jwks.json
       backends: []
