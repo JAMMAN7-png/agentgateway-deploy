@@ -1,0 +1,16 @@
+binds:
+- port: 3000
+  listeners:
+  - routes:
+    - policies:
+        cors:
+          allowOrigins:
+          - "*"
+          allowHeaders:
+          - mcp-protocol-version
+          - content-type
+          - cache-control
+          - authorization
+          exposeHeaders:
+          - "Mcp-Session-Id"
+      backends: []
