@@ -1,13 +1,9 @@
-FROM ghcr.io/agentgateway/agentgateway:v1.1.0
+FROM ghcr.io/agentgateway/agentgateway:v1.1.0 AS agw
 
-# Install bash for Coolify health checks
-USER root
-RUN if command -v apk > /dev/null 2>&1; then apk add --no-cache bash; \
-    elif command -v apt-get > /dev/null 2>&1; then apt-get update && apt-get install -y bash && rm -rf /var/lib/apt/lists/*; \
-    fi || true
-
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates bash && rm -rf /var/lib/apt/lists/*
+COPY --from=agw /app/agentgateway /usr/local/bin/agentgateway
 COPY config.yaml /config.yaml
-
 EXPOSE 3000 15000
-
+ENTRYPOINT ["agentgateway"]
 CMD ["-f", "/config.yaml"]
