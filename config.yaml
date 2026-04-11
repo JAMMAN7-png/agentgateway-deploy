@@ -4,9 +4,7 @@ binds:
 - port: 3000
   listeners:
   - routes:
-    - match:
-        path: /mcp
-      policies:
+    - policies:
         cors:
           allowOrigins:
           - "*"
