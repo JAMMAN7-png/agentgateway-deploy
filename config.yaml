@@ -4,5 +4,5 @@ llm:
   - name: "*"
     provider: openAI
     params:
-      hostOverride: "openrouter.ai"
+      hostOverride: "openrouter.ai:443"
       apiKey: "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"
