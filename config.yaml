@@ -1,15 +1,31 @@
 # yaml-language-server: $schema=https://agentgateway.dev/schema/config
 
-# LLM Gateway — OpenRouter (OpenAI-compatible)
-llm:
-  models:
-  - name: "*"
-    provider: openAI
-    params:
-      apiKey: "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"
-
-# MCP Gateway
+# ─── LLM Gateway (port 4000) ─────────────────────────────
+# Using binds-style for proper hostOverride support
 binds:
+# LLM on port 4000
+- port: 4000
+  listeners:
+  - routes:
+    - backends:
+      - ai:
+          name: openrouter
+          provider:
+            openAI:
+              model: gpt-4o-mini
+          hostOverride: "openrouter.ai"
+          pathPrefix: "/api/v1"
+      policies:
+        backendAuth:
+          key: "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"
+        cors:
+          allowOrigins:
+          - "*"
+          allowHeaders:
+          - content-type
+          - authorization
+
+# MCP on port 3000
 - port: 3000
   listeners:
   - routes:
