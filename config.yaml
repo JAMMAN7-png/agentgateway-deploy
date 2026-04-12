@@ -1,17 +1,14 @@
 # yaml-language-server: $schema=https://agentgateway.dev/schema/config
 
-# ─── LLM Gateway (port 4000) ─────────────────────────────
-# OpenRouter as primary, all models via unified API
+# LLM Gateway — OpenRouter (OpenAI-compatible)
 llm:
-  port: 4000
   models:
   - name: "*"
     provider: openAI
     params:
       apiKey: "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"
-      hostOverride: "openrouter.ai"
 
-# ─── MCP Gateway (port 3000) ─────────────────────────────
+# MCP Gateway
 binds:
 - port: 3000
   listeners:
