@@ -4,4 +4,4 @@ llm:
   - name: "*"
     provider: openAI
     params:
-      apiKey: "$OPENROUTER_API_KEY"
+      apiKey: "sk-test-dummy-key"
