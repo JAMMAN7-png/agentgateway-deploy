@@ -1,6 +1,5 @@
 # yaml-language-server: $schema=https://agentgateway.dev/schema/config
 
-# MCP Gateway — JWT-authenticated tool federation
 binds:
 - port: 3000
   listeners:
@@ -10,10 +9,7 @@ binds:
           allowOrigins:
           - "*"
           allowHeaders:
-          - mcp-protocol-version
-          - content-type
-          - cache-control
-          - authorization
+          - "*"
           exposeHeaders:
           - "Mcp-Session-Id"
         jwtAuth:
