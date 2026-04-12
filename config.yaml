@@ -1,7 +1,50 @@
 # yaml-language-server: $schema=https://agentgateway.dev/schema/config
+
+# ─── LLM Gateway (port 4000) ─────────────────────────────
+# OpenRouter as primary, all models via unified API
 llm:
+  port: 4000
   models:
   - name: "*"
     provider: openAI
     params:
-      apiKey: "sk-test-dummy-key"
+      apiKey: "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"
+      hostOverride: "openrouter.ai"
+
+# ─── MCP Gateway (port 3000) ─────────────────────────────
+binds:
+- port: 3000
+  listeners:
+  - routes:
+    - policies:
+        cors:
+          allowOrigins:
+          - "*"
+          allowHeaders:
+          - mcp-protocol-version
+          - content-type
+          - cache-control
+          - authorization
+          exposeHeaders:
+          - "Mcp-Session-Id"
+      backends:
+      - mcp:
+          targets:
+          - name: exa
+            mcp:
+              host: https://mcp.exa.ai/mcp?exaApiKey=a7c7cd0f-2718-4a39-8e44-90cd4507d24e
+          - name: firecrawl
+            mcp:
+              host: https://mcp.firecrawl.dev/fc-78ffff4ecb64460b98390a13a15dde33/v2/mcp
+          - name: tavily
+            mcp:
+              host: https://mcp.tavily.com/mcp/?tavilyApiKey=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
+          - name: context7
+            mcp:
+              host: https://context7.liam.sh/mcp
+          - name: grep
+            mcp:
+              host: https://mcp.grep.app
+          - name: deepwiki
+            mcp:
+              host: https://mcp.deepwiki.com/mcp
