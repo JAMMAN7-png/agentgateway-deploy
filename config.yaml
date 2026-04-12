@@ -1,3 +1,74 @@
 # yaml-language-server: $schema=https://agentgateway.dev/schema/config
-# Minimal valid config — add listeners/routes/backends via Admin UI
-binds: []
+
+# ─── LLM Gateway ───────────────────────────────────────────
+# Unified OpenAI-compatible API on port 4000
+# Primary: OpenRouter (hundreds of models), Fallback: OpenCode
+llm:
+  port: 4000
+  policies:
+    apiKey:
+      mode: optional
+      keys:
+      - key: "$LLM_GATEWAY_KEY"
+        metadata:
+          user: internal
+  models:
+  # OpenRouter as primary (supports all major models)
+  - name: "*"
+    provider: openAI
+    params:
+      hostOverride: "openrouter.ai"
+      apiKey: "$OPENROUTER_API_KEY"
+      pathPrefix: "/api/v1"
+  # OpenCode as fallback
+  - name: "opencode-*"
+    provider: openAI
+    params:
+      hostOverride: "opencode.ai"
+      apiKey: "$OPENCODE_API_KEY"
+      pathPrefix: "/zen/v1"
+
+# ─── MCP Gateway ───────────────────────────────────────────
+# JWT-authenticated MCP tool federation on port 3000
+binds:
+- port: 3000
+  listeners:
+  - routes:
+    - policies:
+        cors:
+          allowOrigins:
+          - "*"
+          allowHeaders:
+          - mcp-protocol-version
+          - content-type
+          - cache-control
+          - authorization
+          exposeHeaders:
+          - "Mcp-Session-Id"
+        jwtAuth:
+          mode: optional
+          issuer: "chains-pilot"
+          audiences: ["gateway.v244.net"]
+          jwks:
+            url: https://pulse.v244.net/.well-known/jwks.json
+      backends:
+      - mcp:
+          targets:
+          - name: exa
+            mcp:
+              host: https://mcp.exa.ai/mcp?exaApiKey=$EXA_API_KEY
+          - name: firecrawl
+            mcp:
+              host: https://mcp.firecrawl.dev/$FIRECRAWL_API_KEY/v2/mcp
+          - name: tavily
+            mcp:
+              host: https://mcp.tavily.com/mcp/?tavilyApiKey=$TAVILY_API_KEY
+          - name: context7
+            mcp:
+              host: https://context7.liam.sh/mcp
+          - name: grep
+            mcp:
+              host: https://mcp.grep.app
+          - name: deepwiki
+            mcp:
+              host: https://mcp.deepwiki.com/mcp
