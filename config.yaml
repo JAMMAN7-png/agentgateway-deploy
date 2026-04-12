@@ -1,2 +1,3 @@
 # yaml-language-server: $schema=https://agentgateway.dev/schema/config
-# Minimal bootstrap — configure everything via Admin UI at /ui/
+# Minimal valid config — add listeners/routes/backends via Admin UI
+binds: []
