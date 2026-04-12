@@ -31,9 +31,6 @@ binds:
           - name: firecrawl
             mcp:
               host: https://mcp.firecrawl.dev/fc-78ffff4ecb64460b98390a13a15dde33/v2/mcp
-          - name: tavily
-            mcp:
-              host: https://mcp.tavily.com/mcp/?tavilyApiKey=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
           - name: context7
             mcp:
               host: https://context7.liam.sh/mcp
