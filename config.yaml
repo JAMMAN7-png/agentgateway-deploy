@@ -1,10 +1,7 @@
 # yaml-language-server: $schema=https://agentgateway.dev/schema/config
-
 llm:
-  port: 4000
   models:
   - name: "*"
     provider: openAI
     params:
-      hostOverride: "openrouter.ai"
       apiKey: "$OPENROUTER_API_KEY"
