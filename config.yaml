@@ -1,34 +1,27 @@
 # yaml-language-server: $schema=https://agentgateway.dev/schema/config
 
-# LLM Gateway — OpenRouter via binds-style config
+# MCP Gateway — JWT-authenticated tool federation
 binds:
-# LLM on port 4000
-- port: 4000
-  listeners:
-  - routes:
-    - backends:
-      - ai:
-          name: openrouter
-          pathPrefix: /api
-          provider:
-            openAI:
-              model: gpt-4o-mini
-      policies:
-        backendAuth:
-          key: "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"
-        cors:
-          allowOrigins: ["*"]
-          allowHeaders: ["*"]
-
-# MCP on port 3000
 - port: 3000
   listeners:
   - routes:
     - policies:
         cors:
-          allowOrigins: ["*"]
-          allowHeaders: ["mcp-protocol-version", "content-type", "cache-control", "authorization"]
-          exposeHeaders: ["Mcp-Session-Id"]
+          allowOrigins:
+          - "*"
+          allowHeaders:
+          - mcp-protocol-version
+          - content-type
+          - cache-control
+          - authorization
+          exposeHeaders:
+          - "Mcp-Session-Id"
+        jwtAuth:
+          mode: optional
+          issuer: "chains-pilot"
+          audiences: ["gateway.v244.net"]
+          jwks:
+            file: /jwks.json
       backends:
       - mcp:
           targets:
